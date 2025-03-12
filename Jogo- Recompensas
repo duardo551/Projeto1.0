@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Recompensas</title>
+    <script src="https://cdn.jsdelivr.net/npm/admob-plus"></script> <!-- Para usar AdMob -->
+</head>
+<body>
+    <div id="game">
+        <h1>Bem-vindo ao Jogo de Recompensas!</h1>
+        <p>Saldo de Moedas: <span id="saldoMoedas">0</span> moedas</p>
+        <button id="jogar" onclick="completarRodada()">Jogar</button>
+        <button id="saque" onclick="sacarDinheiro()" style="display:none;">Sacar</button>
+        <div id="msgSaque" style="display:none;">Você pode sacar agora!</div>
+        <button id="indicar" onclick="indicarAmigo()">Indicar Amigos</button>
+        <div id="codigoInd" style="display:none;">Seu código de indicação: <span id="codigo"></span></div>
+    </div>
+
+    <script>
+        // Variáveis
+        let saldoMoedas = 0;
+        const valorSaque = 10;
+        let codigoIndicado = Math.random().toString(36).substring(7); // Gerar código aleatório
+
+        // Atualiza o saldo na tela
+        function atualizarSaldo() {
+            document.getElementById('saldoMoedas').innerText = saldoMoedas;
+        }
+
+        // Função de jogo (completar rodada)
+        function completarRodada() {
+            // Aumenta moedas ao completar uma rodada
+            let moedasGanhas = 5;
+            saldoMoedas += moedasGanhas;
+            atualizarSaldo();
+
+            // Exibe mensagem de sucesso
+            alert(`Você ganhou ${moedasGanhas} moedas!`);
+
+            // Exibe anúncio intersticial
+            mostrarAnuncio();
+
+            // Verifica se o jogador pode sacar
+            verificarSaque();
+        }
+
+        // Função para verificar se o jogador pode sacar
+        function verificarSaque() {
+            if (saldoMoedas >= valorSaque) {
+                document.getElementById('saque').style.display = 'inline-block';
+                document.getElementById('msgSaque').style.display = 'inline-block';
+            }
+        }
+
+        // Função para sacar dinheiro
+        function sacarDinheiro() {
+            if (saldoMoedas >= valorSaque) {
+                saldoMoedas -= valorSaque;
+                atualizarSaldo();
+                alert("Saque realizado com sucesso!");
+                document.getElementById('saque').style.display = 'none';
+                document.getElementById('msgSaque').style.display = 'none';
+            }
+        }
+
+        // Função para indicar amigos (gera um código)
+        function indicarAmigo() {
+            alert("Seu código de indicação é: " + codigoIndicado);
+            document.getElementById('codigoInd').style.display = 'inline-block';
+            document.getElementById('codigo').innerText = codigoIndicado;
+
+            // Simula o ganho de R$15 para quem indicou
+            saldoMoedas += 15;
+            atualizarSaldo();
+        }
+
+        // Função para mostrar anúncio intersticial (AdMob)
+        function mostrarAnuncio() {
+            // Aqui você deve configurar a integração com AdMob ou outra rede de anúncios
+            // Exemplo fictício para o AdMob:
+            admob.rewarded.show();
+        }
+    </script>
+</body>
+</html>
